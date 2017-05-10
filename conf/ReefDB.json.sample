@@ -1,0 +1,21 @@
+{
+	"General" : {
+		"version" 	: "1.0",
+		"author" 	: "Jan Bein"
+	},
+	
+	"InfluxDB" : {
+		"host" 		: "localhost",
+		"username" 	: "USERNAME",
+		"password" 	: "PASSWORD",
+		"database" 	: "DATABASE"
+	},
+
+	"Tanks" : {
+		"0" : {
+			"name" 		: "BigTank",
+			"volume"	: 600,
+			"location" 	: "Livingroom"
+		}
+	}
+}
