@@ -10,20 +10,14 @@ if(isset($_POST['newDataSubmitBtn'])) {
         $_CFG['InfluxDB']['database']));
     $client = $influx->getClient();
 
-    $data = array(
-                'nh4'	=> (float) str_replace(',', '.', $_POST['newDataNH4']),
-                'nh3' 	=> (float) str_replace(',', '.', $_POST['newDataNH3']),
-                'ca' 	=> (float) str_replace(',', '.', $_POST['newDataCA']),
-                'kh' 	=> (float) str_replace(',', '.', $_POST['newDataKH']),
-                'mg' 	=> (float) str_replace(',', '.', $_POST['newDataMG']),
-                'no3' 	=> (float) str_replace(',', '.', $_POST['newDataNO3']),
-                'no2' 	=> (float) str_replace(',', '.', $_POST['newDataNO2']),
-                'po4' 	=> (float) str_replace(',', '.', $_POST['newDataPO4']),
-                'ph' 	=> (float) str_replace(',', '.', $_POST['newDataPH']),
-                'salt' 	=> (float) str_replace(',', '.', $_POST['newDataSALT']),
-                'sio2' 	=> (float) str_replace(',', '.', $_POST['newDataSIO2']),
-                'temp' 	=> (float) str_replace(',', '.', $_POST['newDataTEMP'])
-            );
+	$data = array();
+	foreach($_POST as $key => $value) {
+		if($key != "newDataTank" && $key != "newDataWater" && $key != "newDataWaterVolume" && $key != "newDataSubmitBtn") {
+			if($value != null)
+				$data[strtolower(str_replace('newData', '', $key))] = (float) str_replace(',', '.', $value);
+		}
+	}
+	
 	$dataPoint = new InfluxDB\Point(
 		'data',
         null,
@@ -55,7 +49,8 @@ if(isset($_POST['newDataSubmitBtn'])) {
 		array_push($points, $waterPoint);
 
 	dprint_r($points);
-    #$result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
+	dprint_r($_POST);
+    $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
 
 ?>
