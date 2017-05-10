@@ -21,3 +21,16 @@ $('#modalDataDetail').on('show.bs.modal', function(event) {
   });
 });
 
+$(document).ready(function() {
+    $('#newDataWater-1').change(function() {
+		if(this.checked) {
+			$('#newDataWaterVolumeDiv').fadeIn('slow');
+		}
+	});
+	
+    $('#newDataWater-0').change(function() {
+        if(this.checked) {
+            $('#newDataWaterVolumeDiv').fadeOut('slow');
+        }
+    });
+});

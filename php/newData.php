@@ -11,50 +11,51 @@ if(isset($_POST['newDataSubmitBtn'])) {
     $client = $influx->getClient();
 
     $data = array(
-                'nh4'	=> (float) $_POST['newDataNH4'],
-                'nh3' 	=> (float) $_POST['newDataNH3'],
-                'ca' 	=> (float) $_POST['newDataCA'],
-                'kh' 	=> (float) $_POST['newDataKH'],
-                'mg' 	=> (float) $_POST['newDataMG'],
-                'no3' 	=> (float) $_POST['newDataNO3'],
-                'no2' 	=> (float) $_POST['newDataNO2'],
-                'po4' 	=> (float) $_POST['newDataPO4'],
-                'ph' 	=> (float) $_POST['newDataPH'],
-                'salt' 	=> (float) $_POST['newDataSALT'],
-                'sio2' 	=> (float) $_POST['newDataSIO2'],
-                'temp' 	=> (float) $_POST['newDataTEMP']
+                'nh4'	=> (float) str_replace(',', '.', $_POST['newDataNH4']),
+                'nh3' 	=> (float) str_replace(',', '.', $_POST['newDataNH3']),
+                'ca' 	=> (float) str_replace(',', '.', $_POST['newDataCA']),
+                'kh' 	=> (float) str_replace(',', '.', $_POST['newDataKH']),
+                'mg' 	=> (float) str_replace(',', '.', $_POST['newDataMG']),
+                'no3' 	=> (float) str_replace(',', '.', $_POST['newDataNO3']),
+                'no2' 	=> (float) str_replace(',', '.', $_POST['newDataNO2']),
+                'po4' 	=> (float) str_replace(',', '.', $_POST['newDataPO4']),
+                'ph' 	=> (float) str_replace(',', '.', $_POST['newDataPH']),
+                'salt' 	=> (float) str_replace(',', '.', $_POST['newDataSALT']),
+                'sio2' 	=> (float) str_replace(',', '.', $_POST['newDataSIO2']),
+                'temp' 	=> (float) str_replace(',', '.', $_POST['newDataTEMP'])
             );
+	$dataPoint = new InfluxDB\Point(
+		'data',
+        null,
+        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
+		'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
+        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+        $data,
+        exec('date +%s')
+	);
 
-    $points = [
-        new InfluxDB\Point(
-            'data',
-            null,
-            ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
-			 'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
-             'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
-            $data,
+	$waterPoint = "";
+	if($_POST['newDataWater'] == 1) {
+		$waterPoint = new InfluxDB\Point(
+			'water',
+    	    null,
+	        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'],
+            'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
+			'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+	        array('volume' => (float) $_POST['newDataWaterVolume']),
             exec('date +%s')
-        )
-    ];
+        );
+	}
+	
+	$points = array();
+	if($dataPoint instanceof InfluxDB\Point)
+		array_push($points, $dataPoint);
 
-dprint_r($points);
-    $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
-}
+	if($waterPoint instanceof InfluxDB\Point)
+		array_push($points, $waterPoint);
 
-function genDataGroup($_id, $_name, $_symbol, $_placeholder, $_unit) {
-	echo "<!-- ".$_name." -->\r\n";
-    echo "<div class=\"form-group form-inline\">\r\n";
-    echo "  <label class=\"control-label col-md-3\" for=\"newDataNH4\">".$_name."</label>\r\n";
-    echo "  <div class=\"col-md-6 input-group\">\r\n";
-    echo "    <span class=\"input-group-addon\">".$_symbol."</span>\r\n";
-    echo "    <input id=\"newData".strtoupper($_id)."\" name=\"newData".strtoupper($_id)."\" class=\"form-control\" placeholder=\"".$_placeholder."\" type=\"text\">\r\n";
-    echo "    <span class=\"input-group-addon\">".$_unit."</span>\r\n";
-    echo "  </div>\r\n";
-    echo "  <a class=\"btn btn-default btn-md\" data-toggle=\"modal\" data-target=\"#modalDataDetail\" data-did=\"".$_id."\" data-dname=\"".$_name."\">\r\n";
-    echo "    <span class=\"glyphicon glyphicon-stats\" aria-hidden=\"true\"></span>\r\n";
-    echo "  </a>\r\n";
-    echo "</div>\r\n";
-	echo "\r\n";
+	dprint_r($points);
+    #$result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
 
 ?>
@@ -63,20 +64,11 @@ function genDataGroup($_id, $_name, $_symbol, $_placeholder, $_unit) {
       <form class="form-horizontal" id="newDatasetForm" method="post">
         <fieldset>
 
-          <!-- TankSelector -->
-          <div class="form-group form-inline">
-            <label class="control-label col-md-3" for="newDataTank">Tank</label>
-            <div class="col-md-6 input-group">
-              <select id="newDataTank" name="newDataTank" class="form-control">
-			  <?php
-		      	foreach($_CFG['Tanks'] as $key => $tank) {
-					echo "<option value=\"".$key."\">".$tank['name']." (".$tank['region'].", ".$tank['location'].")</option>";
-				}
-			  ?>
-              </select>
-            </div>
-          </div>
 <?php
+	# Generate TankSelector
+	genTankSelector("newDataTank", $_CFG['Tanks']);
+
+	# Generate DataGroups
 	genDataGroup("nh4", "Ammonium", "NH<sub>4</sub>", "< 0.2", "mg/l");
 	genDataGroup("nh3", "Ammonia", "NH<sub>3</sub>", "< 0.02", "mg/l");
 	genDataGroup("ca", "Calcium", "Ca", "400 - 460", "mg/l");
@@ -89,12 +81,39 @@ function genDataGroup($_id, $_name, $_symbol, $_placeholder, $_unit) {
 	genDataGroup("salt", "Salinity", "", "1.022 - 1.024", "g/cm<sup>3</sup>");
 	genDataGroup("sio2", "Silicate", "SiO<sub>2</sub>", "0.1 - 0.3", "mg/l");
 	genDataGroup("temp", "Temperature", "", "23 -28", "&#8451;");
+
 ?>
-          <!-- Button (Double) -->
-          <div class="form-group form-inline">
-            <button id="newDataSubmitBtn" name="newDataSubmitBtn" class="btn btn-success">Submit</button>
-            <button id="newDataClearBtn" name="newDataClearBtn" class="btn btn-primary">Clear</button>
-          </div>
+
+<!-- Multiple Radios (inline) -->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="newDataWater">Water Change?</label>
+  <div class="col-md-6"> 
+    <label class="radio-inline" for="newDataWater-0">
+      <input type="radio" name="newDataWater" id="newDataWater-0" value="0" checked="checked">No
+    </label> 
+    <label class="radio-inline" for="newDataWater-1">
+      <input type="radio" name="newDataWater" id="newDataWater-1" value="1">Yes
+    </label> 
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group form-inline" id="newDataWaterVolumeDiv" style="display:none">
+  <label class="col-md-3 control-label" for="newDataWaterVolume"></label>  
+  <div class="col-md-6 input-group">
+    <span class="input-group-addon"></span>
+    <input id="newDataWaterVolume" name="newDataWaterVolume" type="text" placeholder="15" class="form-control input-md">
+    <span class="input-group-addon">Liter</span>
+  </div>
+  <a class="btn btn-default btn-md" data-toggle="modal" data-target="#modalDataDetail" data-did="ca" data-dname="Calcium">
+    <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+  </a>
+</div>
+
+<?php
+	# Generate Buttons
+	genButtonGroup("newDataSubmitBtn", "newDataClearBtn");
+?>
 
         </fieldset>
       </form>

@@ -9,6 +9,7 @@
 
 	# Import usefull stuff
 	require_once("lib/stuff.lib.php");
+	require_once("lib/html.lib.php");
 
 	require_once("html/head.html");
 
