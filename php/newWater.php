@@ -1,7 +1,30 @@
 <?php
 
 if(isset($_POST['newDataSubmitBtn'])) {
-	dprint_r($_POST);
+    require("./vendor/autoload.php");
+
+    $influx = InfluxDB\Client::fromDSN(
+        sprintf('influxdb://'.$_CFG['InfluxDB']['username'].':'.$_CFG['InfluxDB']['password'].'@%s:%s/%s',
+        $_CFG['InfluxDB']['host'],
+        8086,
+        $_CFG['InfluxDB']['database']));
+    $client = $influx->getClient();
+
+	$waterPoint = new InfluxDB\Point(
+    	'water',
+        null,
+        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'],
+        'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
+        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+        array('volume' => (float) $_POST['newDataWATER']),
+        exec('date +%s')
+    );
+
+    $points = array();
+    if($waterPoint instanceof InfluxDB\Point)
+        array_push($points, $waterPoint);
+        
+    $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
 
 ?>
@@ -11,38 +34,16 @@ if(isset($_POST['newDataSubmitBtn'])) {
       <form class="form-horizontal" role="form" id="newDatasetForm" method="post">
         <fieldset>
 
-          <!-- TankSelector -->
-          <div class="form-group form-inline">
-            <label class="control-label col-sm-3" for="newWaterTank">Tank</label>
-            <div class="col-sm-6 input-group">
-              <select id="newWaterTank" name="newWaterTank" class="form-control">
-			  <?php
-				foreach($_CFG['Tanks'] as $key => $tank) {
-					echo "<option value=\"".$key."\">".$tank['name']." (".$tank['region'].", ".$tank['location'].")</option>";
-				}
-			  ?>
-              </select>
-            </div>
-          </div>
+<?php
+    # Generate TankSelector
+    genTankSelector("newDataTank", $_CFG['Tanks']);
 
-		  <!-- Liter -->
-          <div class="form-group form-inline">
-            <label class="control-label col-sm-3" for="newWaterLiter">Liter</label>
-            <div class="col-sm-6 input-group">
-              <input id="newDataTemp" name="newDataTemp" class="form-control" placeholder="" type="text">
-            </div>
-            <button type="button" class="btn btn-default" aria-label="Stats">
-              <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
-            </button>
-          </div>
+	# Generate FormGroup
+    genDataGroup("Water", "Water", "", "20", "Liter");
 
-         <!-- Buttons (Double) -->
-         <div class="form-group form-inline">
-           <div class="input-group col-sm-6">
-             <button id="newDataSubmitBtn" name="newDataSubmitBtn" class="btn btn-success">Send</button>
-             <button id="newDataClearBtn" name="newDataClearBtn" class="btn btn-danger">Clear</button>
-           </div>
-         </div> 
+    # Generate Buttons
+    genButtonGroup("newDataSubmitBtn", "newDataClearBtn");
+?>
 
         </fieldset>
       </form>

@@ -48,8 +48,6 @@ if(isset($_POST['newDataSubmitBtn'])) {
 	if($waterPoint instanceof InfluxDB\Point)
 		array_push($points, $waterPoint);
 
-	dprint_r($points);
-	dprint_r($_POST);
     $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
 
