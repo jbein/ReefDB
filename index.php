@@ -30,7 +30,7 @@
       	}
    	}
    	else {
-      	require_once("php/home.php");
+      	require_once("php/newData.php");
    	}
 
     require_once("html/modals.html");

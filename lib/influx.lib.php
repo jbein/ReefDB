@@ -22,8 +22,8 @@
     $client = $influx->getClient();
 
 	$points = array();
-	for($i=0; $i<50; $i++) {		
-		$time = exec('date +%s');
+	for($i=0; $i<50; ++$i) {		
+		$time = time();
 		$time = $time - ((49-$i)*604800);
 
 		$data = array();		
