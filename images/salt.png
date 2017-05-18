@@ -1,0 +1,1 @@
+curl -H Authorization: Bearer eyJrIjoiVE9yaDFwMkdjbjNNSzd1ZlE3MHJwQllqUDNVajU3MHUiLCJuIjoiZXhwb3J0IiwiaWQiOjF9 https://dash.janbein.de/render/dashboard-solo/db/reefdb?orgId=1&theme=light&width=870&height=300&panelId=1&var-field=salt&var-tankName=Reefer170

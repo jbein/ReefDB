@@ -11,6 +11,10 @@
 	require_once("lib/stuff.lib.php");
 	require_once("lib/html.lib.php");
 
+	# Import Grapher
+#	require_once("lib/grapher.class.php");
+#	$g = new Grapher($_CFG['Grafana']);
+
 	require_once("html/head.html");
 
 	if(!empty($_GET["event"])) {

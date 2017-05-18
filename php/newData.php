@@ -5,7 +5,7 @@ if(isset($_POST['newDataSubmitBtn'])) {
 
     $influx = InfluxDB\Client::fromDSN(
         sprintf('influxdb://'.$_CFG['InfluxDB']['username'].':'.$_CFG['InfluxDB']['password'].'@%s:%s/%s',
-        $_CFG['InfluxDB']['host'],
+        $_CFG['InfluxDB']['hostname'],
         8086,
         $_CFG['InfluxDB']['database']));
     $client = $influx->getClient();
@@ -52,7 +52,6 @@ if(isset($_POST['newDataSubmitBtn'])) {
 }
 
 ?>
-
 
     <div class="panel">
       <form class="form-horizontal" id="newDatasetForm" method="post">
