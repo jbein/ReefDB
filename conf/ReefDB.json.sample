@@ -11,6 +11,14 @@
 		"database" 	: "DATABASE"
 	},
 
+	"Grafana" : {
+		"hostname" 	: "URL",
+		"username" 	: "USERNAME",
+		"password" 	: "PASSWORD",
+		"dashboard" : "DASHBOARD",
+		"panelID"	: 1
+	},
+
 	"Tanks" : {
 		"0" : {
 			"name" 		: "BigTank",
