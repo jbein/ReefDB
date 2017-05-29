@@ -5,7 +5,7 @@
 	},
 	
 	"InfluxDB" : {
-		"host" 		: "localhost",
+		"hostname"	: "localhost",
 		"username" 	: "USERNAME",
 		"password" 	: "PASSWORD",
 		"database" 	: "DATABASE"

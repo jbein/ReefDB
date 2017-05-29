@@ -18,15 +18,18 @@ if(isset($_POST['newDataSubmitBtn'])) {
 		}
 	}
 	
-	$dataPoint = new InfluxDB\Point(
-		'data',
-        null,
-        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
-		'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
-        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
-        $data,
-        exec('date +%s')
-	);
+	$dataPoint = "";
+	if(!empty($data)) {
+		$dataPoint = new InfluxDB\Point(
+			'data',
+	        null,
+    	    ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
+			'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
+	        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+    	    $data,
+	        exec('date +%s')
+		);
+	}
 
 	$waterPoint = "";
 	if($_POST['newDataWater'] == 1) {
@@ -42,8 +45,9 @@ if(isset($_POST['newDataSubmitBtn'])) {
 	}
 	
 	$points = array();
-	if($dataPoint instanceof InfluxDB\Point)
+	if($dataPoint instanceof InfluxDB\Point) {
 		array_push($points, $dataPoint);
+	}
 
 	if($waterPoint instanceof InfluxDB\Point)
 		array_push($points, $waterPoint);
