@@ -34,3 +34,20 @@ $(document).ready(function() {
         }
     });
 });
+
+
+$(document).ready(function() {
+    $('#newDataTime-1').change(function() {
+		if(this.checked) {
+			$('#newDataTimeDiv').fadeIn('slow');
+			$('#newDataTimeValue').value = '2015-01-02T11:42:13.510';
+		}
+	});
+	
+    $('#newDataTime-0').change(function() {
+        if(this.checked) {
+            $('#newDataTimeDiv').fadeOut('slow');
+        }
+    });
+});
+

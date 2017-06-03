@@ -10,6 +10,7 @@ if(isset($_POST['newDataSubmitBtn'])) {
         $_CFG['InfluxDB']['database']));
     $client = $influx->getClient();
 
+	$timestamp = strtotime($_POST['newDataTimeValue']);
 	$data = array();
 	foreach($_POST as $key => $value) {
 		if($key != "newDataTank" && $key != "newDataWater" && $key != "newDataWaterVolume" && $key != "newDataSubmitBtn") {
@@ -27,7 +28,8 @@ if(isset($_POST['newDataSubmitBtn'])) {
 			'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
 	        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
     	    $data,
-	        exec('date +%s')
+			$timestamp
+#	        exec('date +%s')
 		);
 	}
 
@@ -40,7 +42,8 @@ if(isset($_POST['newDataSubmitBtn'])) {
             'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
 			'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
 	        array('volume' => (float) $_POST['newDataWaterVolume']),
-            exec('date +%s')
+			$timestamp
+#           exec('date +%s')
         );
 	}
 	
@@ -51,6 +54,8 @@ if(isset($_POST['newDataSubmitBtn'])) {
 
 	if($waterPoint instanceof InfluxDB\Point)
 		array_push($points, $waterPoint);
+
+#dprint_r($points);
 
     $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
@@ -81,7 +86,7 @@ if(isset($_POST['newDataSubmitBtn'])) {
 
 ?>
 
-<!-- Multiple Radios (inline) -->
+<!-- WaterChange -->
 <div class="form-group">
   <label class="col-md-3 control-label" for="newDataWater">Water Change?</label>
   <div class="col-md-6"> 
@@ -102,9 +107,29 @@ if(isset($_POST['newDataSubmitBtn'])) {
     <input id="newDataWaterVolume" name="newDataWaterVolume" type="text" placeholder="15" class="form-control input-md">
     <span class="input-group-addon">Liter</span>
   </div>
-  <a class="btn btn-default btn-md" data-toggle="modal" data-target="#modalDataDetail" data-did="ca" data-dname="Calcium">
-    <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
-  </a>
+</div>
+
+<!-- Timepicker -->
+<div class="form-group">
+  <label class="col-md-3 control-label" for="newDataTime">Time</label>
+  <div class="col-md-6"> 
+    <label class="radio-inline" for="newDataTime-0">
+      <input type="radio" name="newDataTime" id="newDataTime-0" value="0" checked="checked">Now
+    </label> 
+    <label class="radio-inline" for="newDataTime-1">
+      <input type="radio" name="newDataTime" id="newDataTime-1" value="1">Other
+    </label> 
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group form-inline" id="newDataTimeDiv" style="display:none">
+  <label class="col-md-3 control-label" for="newDataTimeValue"></label>  
+  <div class="col-md-6 input-group">
+    <span class="input-group-addon"></span>
+    <input id="newDataTimeValue" name="newDataTimeValue" type="datetime-local" value="<?php echo date('Y-m-d\TH:i:s'); ?>" class="form-control input-md">
+    <span class="input-group-addon"></span>
+  </div>
 </div>
 
 <?php
