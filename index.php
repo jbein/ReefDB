@@ -23,8 +23,8 @@
         	case "newData":
             	require_once("php/newData.php");
             	break;
-        	case "newWater":
-            	require_once("php/newWater.php");
+        	case "newLab":
+            	require_once("php/newLab.php");
             	break;
 	        case "about":
     	        require_once("html/about.html");

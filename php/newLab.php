@@ -11,20 +11,21 @@ if(isset($_POST['newDataSubmitBtn'])) {
     $client = $influx->getClient();
 
 	$waterPoint = new InfluxDB\Point(
-    	'water',
+    	'laboratory',
         null,
-        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'],
-        'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
-        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
-        array('volume' => (float) $_POST['newDataWATER']),
+        ['name' => $_CFG['Tanks'][$_POST['newLabTank']]['name'],
+        'volume' => $_CFG['Tanks'][$_POST['newLabTank']]['volume'],
+        'location' => $_CFG['Tanks'][$_POST['newLabTank']]['location']],
+        array('volume' => (float) $_POST['newLabWATER']),
         exec('date +%s')
     );
 
     $points = array();
     if($waterPoint instanceof InfluxDB\Point)
         array_push($points, $waterPoint);
-        
-    $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
+
+dprint_r($_POST);       
+#    $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
 
 ?>
@@ -36,13 +37,13 @@ if(isset($_POST['newDataSubmitBtn'])) {
 
 <?php
     # Generate TankSelector
-    genTankSelector("newDataTank", $_CFG['Tanks']);
+    genTankSelector("newLabTank", $_CFG['Tanks']);
 
-	# Generate FormGroup
+	# Generate FormGroups
     genDataGroup("Water", "Water", "", "20", "Liter");
 
     # Generate Buttons
-    genButtonGroup("newDataSubmitBtn", "newDataClearBtn");
+    genButtonGroup("newLabSubmitBtn", "newLabClearBtn");
 ?>
 
         </fieldset>

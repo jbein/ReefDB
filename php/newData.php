@@ -10,10 +10,10 @@ if(isset($_POST['newDataSubmitBtn'])) {
         $_CFG['InfluxDB']['database']));
     $client = $influx->getClient();
 
-	$timestamp = strtotime($_POST['newDataTimeValue']);
+	$timestamp = $_POST['newDataTimeValue'] == 0 ? time() : strtotime($_POST['newDataTimeValue']);
 	$data = array();
 	foreach($_POST as $key => $value) {
-		if($key != "newDataTank" && $key != "newDataWater" && $key != "newDataWaterVolume" && $key != "newDataSubmitBtn") {
+		if($key != "newDataTank" && $key != "newDataWATER" && $key != "newDataSubmitBtn" && $key != "newDataTimeValue" && $key != "newDataTime") {
 			if($value != null)
 				$data[strtolower(str_replace('newData', '', $key))] = (float) str_replace(',', '.', $value);
 		}
@@ -24,26 +24,24 @@ if(isset($_POST['newDataSubmitBtn'])) {
 		$dataPoint = new InfluxDB\Point(
 			'data',
 	        null,
-    	    ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
-			'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
-	        'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+    	    ['tName' => $_CFG['Tanks'][$_POST['newDataTank']]['name'], 
+			 'tVolume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'], 
+	         'tLocation' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
     	    $data,
 			$timestamp
-#	        exec('date +%s')
 		);
 	}
 
 	$waterPoint = "";
-	if($_POST['newDataWater'] == 1) {
+	if($_POST['newDataWATER'] != "") {
 		$waterPoint = new InfluxDB\Point(
 			'water',
     	    null,
-	        ['name' => $_CFG['Tanks'][$_POST['newDataTank']]['name'],
-            'volume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
-			'location' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
-	        array('volume' => (float) $_POST['newDataWaterVolume']),
+	        ['tName' => $_CFG['Tanks'][$_POST['newDataTank']]['name'],
+             'tVolume' => $_CFG['Tanks'][$_POST['newDataTank']]['volume'],
+			 'tLocation' => $_CFG['Tanks'][$_POST['newDataTank']]['location']],
+	        array('newWater' => (float) $_POST['newDataWATER']),
 			$timestamp
-#           exec('date +%s')
         );
 	}
 	
@@ -54,8 +52,6 @@ if(isset($_POST['newDataSubmitBtn'])) {
 
 	if($waterPoint instanceof InfluxDB\Point)
 		array_push($points, $waterPoint);
-
-#dprint_r($points);
 
     $result = $influx->writePoints($points, InfluxDB\Database::PRECISION_SECONDS);
 }
@@ -83,31 +79,8 @@ if(isset($_POST['newDataSubmitBtn'])) {
 	genDataGroup("salt", "Salinity", "", "1.022 - 1.024", "g/cm<sup>3</sup>");
 	genDataGroup("sio2", "Silicate", "SiO<sub>2</sub>", "0.1 - 0.3", "mg/l");
 	genDataGroup("temp", "Temperature", "", "23 -28", "&#8451;");
-
+    genDataGroup("water", "WaterChange", "", "15", "Liter");
 ?>
-
-<!-- WaterChange -->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="newDataWater">Water Change?</label>
-  <div class="col-md-6"> 
-    <label class="radio-inline" for="newDataWater-0">
-      <input type="radio" name="newDataWater" id="newDataWater-0" value="0" checked="checked">No
-    </label> 
-    <label class="radio-inline" for="newDataWater-1">
-      <input type="radio" name="newDataWater" id="newDataWater-1" value="1">Yes
-    </label> 
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group form-inline" id="newDataWaterVolumeDiv" style="display:none">
-  <label class="col-md-3 control-label" for="newDataWaterVolume"></label>  
-  <div class="col-md-6 input-group">
-    <span class="input-group-addon"></span>
-    <input id="newDataWaterVolume" name="newDataWaterVolume" type="text" placeholder="15" class="form-control input-md">
-    <span class="input-group-addon">Liter</span>
-  </div>
-</div>
 
 <!-- Timepicker -->
 <div class="form-group">
@@ -127,7 +100,7 @@ if(isset($_POST['newDataSubmitBtn'])) {
   <label class="col-md-3 control-label" for="newDataTimeValue"></label>  
   <div class="col-md-6 input-group">
     <span class="input-group-addon"></span>
-    <input id="newDataTimeValue" name="newDataTimeValue" type="datetime-local" value="<?php echo date('Y-m-d\TH:i:s'); ?>" class="form-control input-md">
+      <input id="newDataTimeValue" name="newDataTimeValue" type="datetime-local" class="form-control input-md">
     <span class="input-group-addon"></span>
   </div>
 </div>

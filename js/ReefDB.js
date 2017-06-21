@@ -22,25 +22,9 @@ $('#modalDataDetail').on('show.bs.modal', function(event) {
 });
 
 $(document).ready(function() {
-    $('#newDataWater-1').change(function() {
-		if(this.checked) {
-			$('#newDataWaterVolumeDiv').fadeIn('slow');
-		}
-	});
-	
-    $('#newDataWater-0').change(function() {
-        if(this.checked) {
-            $('#newDataWaterVolumeDiv').fadeOut('slow');
-        }
-    });
-});
-
-
-$(document).ready(function() {
     $('#newDataTime-1').change(function() {
 		if(this.checked) {
 			$('#newDataTimeDiv').fadeIn('slow');
-			$('#newDataTimeValue').value = '2015-01-02T11:42:13.510';
 		}
 	});
 	
