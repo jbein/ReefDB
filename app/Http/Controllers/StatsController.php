@@ -9,10 +9,11 @@ class StatsController extends Controller {
         $result = InfluxDB::query('select '.$stat.'::field from data');
         $points = $result->getPoints();
 
-        dd($points);
+        #dd($points);
 
         return view('stats', [
-            'stat' => $points
+            'stat' => $stat,
+            'points' => $points,
         ]);
     }
 }

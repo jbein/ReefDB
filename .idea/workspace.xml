@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2d4e5119-b822-4b3b-bbc0-48bd07601df0" name="Default Changelist" comment="" />
+    <list default="true" id="2d4e5119-b822-4b3b-bbc0-48bd07601df0" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../app/Http/Controllers/EventController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../public/css/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../public/js/bootstrap.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../public/js/jquery-3.4.1.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../resources/views/layout.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/DataController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/DataController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/StatsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/StatsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/data.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/data.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/stats.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/stats.blade.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +24,9 @@
     <execution>
       <executable />
     </execution>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -112,6 +127,7 @@
     </include_path>
   </component>
   <component name="ProjectId" id="1WO7e6j4V9InsnXPcjhPMWj0Av8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -119,11 +135,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../resources/views" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../public/js" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../public/js" />
+      <recent name="$PROJECT_DIR$/../public/css" />
       <recent name="$PROJECT_DIR$/../resources/views" />
       <recent name="$PROJECT_DIR$/../app/Http/Controllers" />
       <recent name="$PROJECT_DIR$/resources/views" />
@@ -162,6 +181,7 @@
       <workItem from="1579072383942" duration="5178000" />
       <workItem from="1579511906683" duration="800000" />
       <workItem from="1579871559554" duration="664000" />
+      <workItem from="1580207253125" duration="4366000" />
     </task>
     <servers />
   </component>
