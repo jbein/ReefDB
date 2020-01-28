@@ -1,0 +1,32 @@
+{
+    "name": "tray-labs/laravel-influxdb",
+    "description": "A service made to provide, set up and use the library from influxdata influxphp in Laravel.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tray Labs",
+            "email": "dev@traylabs.com.br"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TrayLabs\\InfluxDB\\": "src/"
+        }
+    },
+    "require": {
+        "influxdb/influxdb-php": "^1.15",
+        "illuminate/support": "^5.0|^6.0"
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TrayLabs\\InfluxDB\\Providers\\ServiceProvider"
+            ],
+            "aliases": {
+                "InfluxDB": "TrayLabs\\InfluxDB\\Facades\\InfluxDB"
+            }
+        }
+   }
+}
